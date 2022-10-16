@@ -27,6 +27,14 @@ color: #FF9900;
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements --><!--[if lt IE 9]>
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<style>
+  .tab {
+      display: inline-block;
+      margin-left: 40px;
+  }
+</style>
+
 </head>
 
 <body>
@@ -34,32 +42,37 @@ color: #FF9900;
 <div class="page-header">
 
 <!-- Title and Name --> 
-<h1>Your Title Here</h1> 
-<span style="font-size: 20px; line-height: 1.5em;"><strong>Names of Team Members Here</strong></span><br>
-<span style="font-size: 18px; line-height: 1.5em;">Fall 2021 ECE 4554/5554 Computer Vision: Course Project</span><br>
+<h1>Adversarial Patch Attacks for the <br> Camouflaging of Pedestrians and Cars From <br> Computer Vision Models in Autonomous Driving
+</h1> 
+<span style="font-size: 20px; line-height: 1.5em;"><strong>Kevin Lizarazu-Ampuero <br> Jhonny Velasquez</strong></span><br>
+<span style="font-size: 18px; line-height: 1.5em;">Fall 2022 ECE 4554/5554 Computer Vision: Course Project</span><br>
 <span style="font-size: 18px; line-height: 1.5em;">Virginia Tech</span>
 <hr>
 
-Please see <a href="http://vision.cs.utexas.edu/projects/adapted_attributes/">this</a> for an example of how to lay out the various details of your project. You may need to provide more details than this, because you will not be submitting an associated paper to accompany the webpage. So the page should be self-contained.
+<!-- Please see <a href="http://vision.cs.utexas.edu/projects/adapted_attributes/">this</a> for an example of how to lay out the various details of your project. You may need to provide more details than this, because you will not be submitting an associated paper to accompany the webpage. So the page should be self-contained. -->
 
 <!-- Goal -->
 <h3>Abstract</h3>
+Vulnerabilities and exploitations are always apparent in a world where adversaries exist to wreck havoc on the systems that keep us safe and maintain order in society.
+With most modern systems becoming more automated, keeping humans out of the loop, places us at the mercy of these black box algorithms that many times
+are affected by the small perturbations, many of which are imperctible to humans.
 
-One or two sentences on the motivation behind the problem you are solving. One or two sentences describing the approach you took. One or two sentences on the main result you obtained.
 <br><br>
 <!-- figure -->
-<h3>Teaser figure</h3>
+<!-- <h3>Teaser figure</h3>
 A figure that conveys the main idea behind the project or the main application being addressed.
 <br><br>
 <!-- Main Illustrative Figure --> 
-<div style="text-align: center;">
-<img style="height: 200px;" alt="" src="mainfig.png">
-</div>
+<!-- <div style="text-align: center;"> -->
+<!-- <img style="height: 200px;" alt="" src="mainfig.png"> -->
+<!-- </div> -->
 
 <br><br>
 <!-- Introduction -->
-<h3>Introduction</h3>
-Motivation behind the problem you are solving, what applications it has, any brief background on the particular domain you are working in (if not regular RBG photographs), etc. If you are using a new way to solve an existing problem, briefly mention and describe the existing approaches and tell us how your approach is new.
+<h3>Problem Statement</h3>
+Object detection systems have seen widespread use in recent years with the rapid development of computational resources and improved machine learning algorithms, allowing for even the most complex detectors to be able to deploy on systems “on the edge”, in environments and settings which would not have been possible only a decade ago. Object detection systems today are used for various applications such as autonomous vehicle navigation, security systems, and applications that require an object's tracking. More use cases and applications that can use object detectors are constantly being found and developed. However, as we become more dependent on object detectors to perform critical tasks, such as identifying security threats and safely navigating autonomous vehicles, the issue of robustness in a world where adversaries exist is one that must be addressed.
+<br> <br>There are two main types of adversarial attacks that we identify. The first is an attack aimed directly at the physical device performing the detection, which prevents the device from actually performing object detection. The second is an attack aimed at the classification that the detector performs, and attempts to mislead the detector as to what it is actually detecting. For this project, we will focus on the latter. Specifically, we will attempt to first successfully create an object detection system that identifies pedestrians and vehicles. The framework used to train this object detection system will then be used to create an adversarial patch attack that will successfully interfere with the classification of objects within an image given that there is knowledge about the dataset it was trained on as well. With this project we aim to exploit vulnerabilities by going to the lengths that adversarial partners would take to mess with automated systems that keep the public safe and in-check.
+
 
 <br><br>
 <!-- Approach -->
@@ -103,7 +116,7 @@ Provide a list of references to other work that supported your project.
 
   <hr>
   <footer> 
-  <p>© Names of Team Members Here</p>
+  <p>© Kevin Lizarazu-Ampuero (sp1cybo1@vt.edu), Jhonny Velasquez(jhonnyv19@vt.edu)</p>
   </footer>
 </div>
 </div>
