@@ -57,7 +57,7 @@ Vulnerabilities and exploitations are always apparent in a world where adversari
 With most modern systems becoming more automated, keeping humans out of the loop, places us at the mercy of these black box algorithms that many times
 are affected by the small perturbations, many of which are imperctible to humans.
 
-<br><br>
+<hr>
 <!-- figure -->
 <!-- <h3>Teaser figure</h3>
 A figure that conveys the main idea behind the project or the main application being addressed.
@@ -67,7 +67,6 @@ A figure that conveys the main idea behind the project or the main application b
 <!-- <img style="height: 200px;" alt="" src="mainfig.png"> -->
 <!-- </div> -->
 
-<br><br>
 <!-- Introduction -->
 <h3>Problem Statement</h3>
 Object detection systems have seen widespread use in recent years with the rapid development of computational resources and improved machine learning algorithms, allowing for even the most complex detectors to be able to deploy on systems “on the edge”, in environments and settings which would not have been possible only a decade ago. Object detection systems today are used for various applications such as autonomous vehicle navigation, security systems, and applications that require an object's tracking. More use cases and applications that can use object detectors are constantly being found and developed. However, as we become more dependent on object detectors to perform critical tasks, such as identifying security threats and safely navigating autonomous vehicles, the issue of robustness in a world where adversaries exist is one that must be addressed.
@@ -77,41 +76,81 @@ Object detection systems have seen widespread use in recent years with the rapid
 <br><br>
 <!-- Approach -->
 <h3>Approach</h3>
-Describe very clearly and systematically your approach to solve the problem. Tell us exactly what existing implementations you used to build your system. Tell us what obstacles you faced and how you addressed them. Justify any design choices or judgment calls you made in your approach.
+<h4><i>A. Object Detection System</i> </h4>
+The first part of this project will be to develop an object detection/classifier system that can successfully detect, with a reasonable degree of accuracy, pedestrians and vehicles, similar to what an object detection system on an autonomous vehicle could expect to see. We will take advantage of the unique property of convolutional neural networks in how they disentangle an image’s variation factors within a space of possible activations to gather semantic information of what’s contained in the captured region [6]. Having such a unique pattern-recognizing algorithm for the purpose of generalizing objects in object recognizing tasks has us expect that there are levels of robustness to small perturbations when the object is being categorized, when in reality it has been found that applying imperceptible non-random perturbations, from optimizing the inputs to maximize prediction error, affects the network’s prediction of objects. As seen by Figure 1, when an image has been applied with imperceptible perturbations it is imperceptible to us, but negatively affects the system predicting it, as seen by the difference between the two where there are points of interest that shift the model’s understanding of what’s in the image.
+<br><br>
+
+<div style="text-align: center;"> 
+<img style="height: 200px;" alt="" src="./images/fig1.png">
+<br> 
+<i><stronf>Figure 1:</stronf></i> On all of these images the left-most image is the original image, on the right-most image are images that have been predicted incorrectly as an ostrich, Struthio camelus, and the center image is a result of the difference between original and incorrectly-classified image. [6]
+</div>
+<br>
+
+To create our object detection models we must first consider the various one-stage pipelines, YOLOv2 or SSD, and two-stage frameworks, Faster R-CNN or Mask RCNN, at our disposal [5]. Two-stage detectors are known to use a region proposal network (RPN) to identify bounding boxes in stage one, and then classify the contents within the bounding boxes for stage two if the objectness score is high enough in stage one. This is different than one-stage pipelines in which prediction is taken at the same time as the object proposal is being generated. Major differences between the two frameworks is that two-stage detectors essentially prioritize detection accuracy, while one-stage frameworks prioritize inference speeds. For this project, the one-stage and two-stage detectors of choice are YOLO and Faster RCNN when comparing adversarial attack results. <br>
+<br>
+
+The detector will be developed using a machine learning API in Python, most likely either Tensorflow or PyTorch. To develop object detection at this stage, data will be a critical factor that will determine the success of the machine learning model. We expect that the data collected from the Waymo Perception dataset and NuScenes datasets will be enough to develop a robust object detection system in the context of an autonomous vehicle encountering pedestrians and cars while traversing roads [2][3]. However, we are also considering the generation of synthetic data using Unity, in the form of simulated vehicle and pedestrian images, for the machine learning model to also train on. This will be a separate sub-goal of this project, specifically evaluating effects on performance on image-based object detectors with the use of synthetic data to provide methods of testing adversarial patch effectiveness when training other machine learning models in a cost and time-effective manner.
+<br>
+
+<h4><i>B. Adversarial Patch Attack</i> </h4>
+Adversarial digital attacks can occur in both the black and white box settings. In the black box attack, the patch is crafted on a surrogate model and then tested on a victim model with different parameters to make patch effective for our expectations [5]. This differs from the white box attack in which the attacker has knowledge on the weights of the object detection model that is then used to train a patch. In real world situations the attacker is imploring a black box attack, weights are unknown, and be transferable from the digital world into the physical world, with the ultimate goal of generalizing digital-attacks to the real-world. In our project the plan is to work with white-box attacks so that we can increase our opportunity in creating an effective adversarial patch.
+<br><br>
+Our approach to train an adversarial patch is by obtaining bounding box information from a dataset of our choosing, which are then used to place a randomly transformed patch over each detected person’s bounding box that were sampled, updating the pixels in the patch to minimize the objectness score in the output feature map. Additional transformations and augmentations are implemented in the training of this patch by a randomized vector and in compositions of varying levels of brightness, contrast, rotation, translation, and shearing effects to aid in the robustness of the patch when applied to the real world [5].
+<br><br>
+Two outcomes are when inserting a robust DPatch that are either in the form of targeted, patch aims to make the occupied bounding box region to recognize the space as the only Region of Interest (RoI) by the framework and invalidate their output no matter the placement of the patch, or untargeted attacks, a patch that also despite its location aims to disable the detector or misclassify the object as seen in Figure 2 [7].
+<br><br>
+<div style="text-align: center;"> 
+  <img style="height: 200px;" alt="" src="./images/fig2.png">
+  <br> 
+  <i><stronf>Figure 2:</stronf></i> After applying the patch on the upper-left of the right image the object detection system, YOLO, fails to detect and classify as the bounding box is small and contains invalid tags.
+  </div>
+  <br>
+Creating these adversarial patches will require the use of the Adversarial Robustness Toolbox (ART) to create DPatch and Robust DPatch attacks [8]. Following their code structure API and theory from pseudocode we the following is desired in Figure 3. <br><br>
+<div style="text-align: center;"> 
+  <img style="height: 200px;" alt="" src="./images/fig3.png">
+  <br> 
+  <i><stronf>Figure 3:</stronf></i> Robust DPatch
+  </div>
 
 <br><br>
+
+
 <!-- Results -->
 <h3>Experiments and results</h3>
-Provide details about the experimental set up (number of images/videos, number of datasets you experimented with, train/test split if you used machine learning algorithms, etc.). Describe the evaluation metrics you used to evaluate how well your approach is working. Include clear figures and tables, as well as illustrative qualitative examples if appropriate. Be sure to include obvious baselines to see if your approach is doing better than a naive approach (e.g. for classification accuracy, how well would a classifier do that made random decisions?). Also discuss any parameters of your algorithms, and tell us how you set the values of those parameters. You can also show us how the performance varies as you change those parameter values. Be sure to discuss any trends you see in your results, and explain why these trends make sense. Are the results as expected? Why?
-
-<br><br>
-
-<!-- Main Results Figure --> 
-<div style="text-align: center;">
-<img style="height: 300px;" alt="" src="results.png">
-</div>
+As mentioned in the previous section, the machine learning model will be developed using a machine learning framework, most likely either Tensorflow or PyTorch due to the vast amount of available documentation and communities that use the software. The availability of annotated data will be a critical factor in determining the performance of the object detector. Currently, the nuScenes [2] and Waymo Perception datasets [3] are being considered for use, particularly for their abundance and specificity in the type of data that we intend to detect. We expect that this will be enough data to successfully train a robust machine learning model. The exact neural network architecture that will be used is currently unknown, however, a combination of convolutional layers and multi-layer perceptrons is expected, as it is a common theme in many successful image recognition models. As mentioned previously, a sub-goal of this project is to evaluate if any significant performance improvements (>2% accuracy improvement) in object detection can be obtained by generating synthetic images, which is a technique commonly used when data is sparse. However, since data sparsity is not an issue, this project will also explore if a combination of both real-world and synthetic data can lead to performance improvements and robustness. The synthetic data will be generated using Unity’s Perception Package (Unity Computer Vision) [4] which provides a framework for the generation of synthetic images while also allowing for variations in image parameters to provide a robust dataset.
 <br><br>
 
 <!-- Results -->
-<h3>Qualitative results</h3>
-Show several visual examples of inputs/outputs of your system (success cases and failures) that help us better understand your approach.
+<h3>Results</h3>
+Performance metrics for the object detection machine learning model will be based primarily on the accuracy and loss values that are determined by the chosen machine learning framework (i.e. Tensorflow, PyTorch, etc.). These results will, as of now, be based off of a 80/15/5 split, for the training, validation, and test data sets respectively. As mentioned in the previous sections, the use of synthetic data will be also explored as a potential way to improve the performance of the object detector. This will be done by comparing accuracy metrics with and without the use of synthetic data during training. Since it is currently unknown how much, if any, improvements can be made with the use of synthetic data, a consistent 2% improvement in accuracy with the use of synthetic data will be considered a success. To visualize this, accuracy/loss vs epoch plots will be created.
+<br><br>
+Overall, a successful project will include developing an object detection machine learning model that can detect vehicles and pedestrians with over 90% accuracy on average, and developing adversarial patch attacks that decrements the accuracy percentage to under the stated threshold, misclassify objects in the image, or completely disable the object detection model created.
 <br><br>
 
-<!-- Main Results Figure --> 
-<div style="text-align: center;">
-<img style="height: 300px;" alt="" src="qual_results.png">
-</div>
-<br><br>
-
-<!-- Conclusion -->
+<!-- Conclusion
 <h3>Conclusion</h3>
 This report has described .... Briefly summarize what you have done. 
-<br><br>
+<br><br> -->
 
 <!-- References -->
 <h3>References</h3>
-Provide a list of references to other work that supported your project.
+[1] R. C. Gonzalez and R. E. Woods, Digital Image Processing, 4th ed. New York, NY: Pearson, 2018.
 <br><br>
+[2] H. Caesar et al., “nuScenes: A multimodal dataset for autonomous driving,” arXiv preprint arXiv:1903.11027, 2019.
+<br><br>
+[3] “Waymo Perception Dataset,” Google Waymo. [Online]. Available: https://waymo.com/open/data/perception/. [Accessed: 15-Oct-2022]. 
+<br><br>
+[4] Unity Technologies, Unity Perception Package. https://github.com/Unity-Technologies/com.unity.perception, 2020. [Online]. Available: https://github.com/Unity-Technologies/com.unity.perception
+<br><br>
+[5] Wu, Zuxuan, et al. “Making an Invisibility Cloak: Real World Adversarial Attacks on Object Detectors.” ArXiv.org, 22 July 2020, https://arxiv.org/abs/1910.14667. 
+<br><br>
+[6] Szegedy, Christian, et al. “Intriguing Properties of Neural Networks.” ArXiv.org, 19 Feb. 2014, https://arxiv.org/abs/1312.6199. 
+<br><br>
+[7] Liu, Xin, et al. “DPatch: An Adversarial Patch Attack on Object Detectors.” ArXiv.org, 23 Apr. 2019, https://arxiv.org/abs/1806.02299v4. 
+<br><br>
+[8] Trusted-AI. “Art Attacks · Trusted-Ai/Adversarial-Robustness-Toolbox Wiki.” GitHub, https://github.com/Trusted-AI/adversarial-robustness-toolbox/wiki/ART-Attacks. 
+
 
 
   <hr>
