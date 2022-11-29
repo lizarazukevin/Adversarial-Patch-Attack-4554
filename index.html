@@ -79,8 +79,8 @@ a normal detection sample using YOLOv5s weights trained on the first 128 images 
 
 <br><br>
 
-<img style="height: 200px;" alt="" src="images/test1.jpg">
-<img style="height: 200px;" alt="" src="images/test2.jpg">
+<img style="height: 200px;" alt="" src="images/patchedImage.jpg">
+<img style="height: 200px;" alt="" src="images/patched_image2.jpg">
 <br><i><stronf>Figure 3 and 4:</stronf></i> Images are now evaluated with a trained adversarial patch
 embedded in each image, causing it to miss classifications that were present in Figures 1 and 2.
 
@@ -297,9 +297,39 @@ with over 90% accuracy on average, and developing adversarial patch attacks that
 misclassify objects in the image, or completely disable the object detection model created.
 <br><br>
 
+<div style="text-align: center;">
+  <img style="height: 200px;" alt="" src="images/test1.jpg">
+  <img style="height: 200px;" alt="" src="images/nonPatchBar.jpg">
+  <br><i><stronf>Figure 8 and 9:</stronf></i> This is the distribution for classes and objects found for when patch was applied here.
+  
+  <br><br>
+
+  <div style="text-align: center;">
+    <img style="height: 200px;" alt="" src="images/patchedYolo.jpg">
+    <img style="height: 200px;" alt="" src="images/patchBar.jpg">
+    <br><i><stronf>Figure 8 and 9:</stronf></i> Using an example adversarial patch that we want to create, the following analysis was made, not sufficient decrement in accuracy.
+    
+    <br><br>
+
+<!-- References -->
+<h3>Hardships</h3>
+Original plans included training the object detector on the NuScenes/NuImages datasets, which provide thousands of images of different autonomous driving scenarios with annotations for vehicles, pedestrians, etc. However, the annotation format associated with this dataset proved to be difficult to transform to the YOLO data format that is required for the most popular PyTorch implementations of the model. Additionally, the Waymo publicly available dataset only provided data in the TensorFlow exclusive TFRecord format, which is a binary file developed exclusively for training through Tensorflow. For this reason, the Udacity dataset from Roboflow [21'] was used.
+<br><br>
+Additionally, the generation of the patches described in the DPatch paper [3] was another area where difficulty was encountered. Due to this being an ongoing field of research, it was difficult to find reference implementations that could be adapted to our specific application. For this reason, it was important to spend time developing adversarial attacks for simpler 
+
+
 <!-- Conclusion -->
 <h3>Conclusion</h3>
-This report has described .... Briefly summarize what you have done. 
+Work that expands on this project would be to solve the data formatting problem encountered during object detection model development. By expanding the dataset used to train the model, it could be made robust enough to more accurately assess the performance that adversarial attacks have on the model instead of mistaking good performance from an adversarial attack for the results of a bad object detector. 
+Additionally, more work and research would have to take place to ensure the proper generation of the DPatches described in the paper [5'].
+
+There is also ongoing research regarding how to train models that are robust to these types of attacks that involve subtly transforming the input image. It would be interesting to compare how models trained using these attack prevention methods perform compared to conventionally trained models. MATLAB provides one example implementation of this, where they train a model using adversarial training [4']. In general, adversarial training
+Adversarial attacks on object detection models are a very important field of research, as automation is quickly becoming incorporated into many aspects of our lives. The implications of object detection models in critical applications being easily fooled could be devastating, and it is important that issues like these are solved if we ever hope to deploy these systems into the real world while still maintaining the trust of the public for AI systems.
+
+Synthetic data generation for this project would also require semi-realistic 3D models of vehicles and/or pedestrians in different orientations. Although there exist 3D models of humans used to generate pose detection models, there are no commonly available models for vehicles. However, this also opens the possibility of using synthetic data to augment training datasets with synthetic images of pedestrians, since the distribution of object classes in most popular datasets for autonomous vehicles is usually skewed more towards vehicles.
+
+
+
 <br><br>
 
 <!-- References -->
@@ -341,6 +371,7 @@ This report has described .... Briefly summarize what you have done.
 [18'] “Common objects in context,” COCO. [Online]. Available: https://cocodataset.org/#home. [Accessed: 28-Nov-2022]. 
 <br><br>
 [19'] A. Athalye, L. Engstrom, A. Ilyas, and K. Kwok, “Synthesizing robust adversarial examples,” arXiv.org, 07-Jun-2018. [Online]. Available: https://arxiv.org/abs/1707.07397. [Accessed: 28-Nov-2022]. 
+[20'] https://public.roboflow.com/object-detection/self-driving-car
 
 
   <hr>

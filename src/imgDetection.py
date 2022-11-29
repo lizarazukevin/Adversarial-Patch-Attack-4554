@@ -61,7 +61,7 @@ def plotInfo(info):
 def main():
 
     # ensures there's a single directory for image
-    if len(sys.argv[1]) == 0:
+    if len(sys.argv) == 0:
         return
     
     # records image directory
