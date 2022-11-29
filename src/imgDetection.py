@@ -5,6 +5,8 @@ import numpy as np
 import torch
 import matplotlib.pyplot as plt
 
+from datetime import datetime
+
 # loading a pretrained model and capturing its data: https://docs.ultralytics.com/tutorials/pytorch-hub/
 
 # loads the yolov5s model trained on COCO128 (default)
@@ -43,6 +45,9 @@ def plotInfo(info):
         name.pop(curr_index)
 
     # plotting occurs here
+    now = datetime.now()
+    time = now.strftime("%H%M%S")
+    out_dir = '../data/results/test'+ time +'.jpg'
     fig = plt.figure(figsize=(15,10))
     ax = fig.add_axes([0,0,1,1])
     ax.bar(x, y, edgecolor="black")
@@ -50,7 +55,7 @@ def plotInfo(info):
     plt.title("Object Detector Output", size=15)
     plt.ylabel("Confidence Level", size=15)
     plt.xlabel("Object Class", size=15)
-    plt.savefig('../data/results/test.jpg',bbox_inches='tight', dpi=150)
+    plt.savefig(out_dir, bbox_inches='tight', dpi=150)
 
 
 def main():
